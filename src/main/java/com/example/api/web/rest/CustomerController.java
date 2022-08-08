@@ -24,10 +24,47 @@ public class CustomerController {
 		this.service = service;
 	}
 
-	@GetMapping
-	public List<Customer> findAll() {
-		return service.findAll();
+
+	@GetMapping("/busca")
+		public Page<Customer> findAll(
+			@RequestParam(
+				value = "page",
+				required = false,
+				defaultValue = "0") int page,
+			@RequestParam(
+				value = "size",
+				required = false,
+				defaultValue = "10") int size){
+					return service.busca(page, size);
+
+				}
+			
+			
+	
+	@PostMapping("/cadastro")
+	public ResponseEntity<?> cadastroCliente (@RequestBody Customer customer,
+											  @RequestHeader HttpHeaders httpHeaders,
+											  HttpServletRequest request){
+	 try{
+		service.cadastraCliente(customer);
+		return ResponseEntity.status(HttpStatus.CREATED).body(customer);
+	 }catch(Exception e){
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro no cadastro do cliente");
+	 }
 	}
+
+	@PatchMapping("/edita")
+	public ResponseEntity<?> editaCliente (@RequestBody Customer customer,
+										   @RequestHeader HttpHeaders httpHeaders,
+										   HttpServletRequest request){
+       try{
+		service.editaCliente(customer);
+		return ResponseEntity.status(HttpStatus.OK).body(customer);
+	   }catch(Exception e){
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro no update do cliente");
+	   }
+	}
+	
 
 	@GetMapping("/{id}")
 	public Customer findById(@PathVariable Long id) {

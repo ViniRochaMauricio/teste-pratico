@@ -24,6 +24,17 @@ public class Customer {
 	@Email
 	private String email;
 
+	@Column
+	private List<String> enderecosList;
+
+	public List<String> getEnderecos(){
+		return enderecosList;
+	}
+
+	public void setEnderecos(List<String> enderecosList){
+		this.enderecosList = enderecosList;
+	}
+
 	public Long getId() {
 		return id;
 	}
